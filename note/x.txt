@@ -1,0 +1,95 @@
+内网穿透
+fastapi后端
+容器0 容器1 容器2
+
+#   python attach docker  暂时不实现
+#   容器内部，需要启动参数
+#   docker容器 安装 python3.12
+#   subprocess启动 yolo
+#   后端fastapi 如何发送请求  socket??
+
+2XX 请求成功
+200 - OK（请求成功）
+204 - No Content（无内容）
+206 - Partial Content（部分内容）
+3XX 重定向
+301 - Moved Permanently（永久移动）
+302 - Found（临时移动）
+303 - See Other（查看其他地址）
+304 - Not Modified（未修改）
+307 - Temporary Redirect（临时重定向）
+4XX 客户端错误
+400 - Bad Request（错误请求）
+401 - Unauthorized（未经授权）
+403 - Forbidden（拒绝请求）
+404 - Not Found（无法找到）
+5XX 服务器错误
+500 - Internal Server Error（内部服务器错误）
+503 - Service Unavailable（服务不可用）
+
+
+
+########################################################################################################################################################################################################
+
+aerich init -t config.TORTOISE_ORM
+aerich init-db
+aerich migrate --name update_user
+aerich upgrade
+
+########################################################################################################################################################################################################
+
+Linux:
+vim /usr/lib/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock \
+
+Windows:
+"hosts": ["tcp://0.0.0.0:2375"]
+
+{
+    "features":{
+        "remoteSocket": {"enabled": true, "socketPort": "2375"}
+    }
+}
+
+netsh interface portproxy add v4tov4 listenaddress=192.168.1.172 listenport=2375 connectaddress=127.0.0.1 connectport=2375
+
+                bash等shell想要保持运行，必须指定tty，也就是-it
+
+fttfff          docker create --name python_print  python:latest python /root/p.py
+tttttt   -it    docker create -it --name python_print_it  python:latest python /root/p.py        docker logs       docker logs -f
+
+########################################################################################################################################################################################################
+
+docker cuda pytorch
+
+第1步
+Windows中安装NVIDIA GPU驱动, 驱动中自带对WSL2的支持,
+成功安装后WSL2中可以使用nvidia-smi命令, /usr/lib/wsl/lib/nvidia-smi
+( 一定不要在WSL2中安装 NVIDIA GPU驱动, 因为有可能会覆盖掉Windows中安装的驱动 )
+第2步
+在WSL2中安装 CUDA Toolkit 12.6 WSL-Ubuntu
+第3步
+在WSL2中安装pytorch
+
+--gpu all
+--runtime=nvidia        (这个可能不需要)
+--shm-size 8G           共享内存share memory
+--privileged=true       特权模式
+
+sudo apt install -y nvidia-container-toolkit nvidia-container-runtime
+docker pull nvidia/cuda:12.6.0-runtime-ubuntu22.04
+docker run -itd --gpus all --name <container name> -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all nvidia/cuda:12.6.0-runtime-ubuntu22.04 /bin/bash
+
+torch.cuda.is_available()
+torch.cuda.device_count()
+torch.cuda.current_device()
+torch.cuda.get_device_name()
+torch.version.cuda
+
+"Docker File"
+
+docker commit container_name new_image
+docker save -o xxx.tar image_name
+docker load -i xxx.tar
+
+########################################################################################################################################################################################################
