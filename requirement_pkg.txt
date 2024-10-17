@@ -1,7 +1,8 @@
 pip install fastapi
 pip install "uvicorn[standard]"
 pip install tortoise-orm[asyncpg]
-pip install docker
 pip install aerich
-pip install aiohttp
 pip install pydantic-settings
+
+# pip install docker
+# pip install aiohttp

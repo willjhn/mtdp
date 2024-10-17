@@ -1,8 +1,8 @@
-from pydantic import BaseModel, Field
-
+from pydantic import BaseModel
 from tortoise.models import Model
 from tortoise import fields
-from tortoise.contrib.postgres.fields import ArrayField
+
+USER_LEVEL_ADMIN = 'ADMIN'
 
 
 class UserModel(Model):
@@ -10,10 +10,12 @@ class UserModel(Model):
     email = fields.CharField(max_length=32)
     password = fields.CharField(max_length=32)
     name = fields.CharField(max_length=16)
+    level = fields.CharField(max_length=16)
     token = fields.CharField(max_length=32)
     description = fields.CharField(max_length=128, default='')
-    project = None
     delete = fields.BooleanField(default=False)
+    create = fields.DatetimeField(auto_now_add=True)
+    update = fields.DatetimeField(auto_now=True)
 
     class Meta:
         table = "USER_MODEL"
